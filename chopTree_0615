@@ -1,0 +1,86 @@
+#define _CRT_SECURE_NO_WARNINGS
+
+#include <stdio.h>
+
+//1. 숫자를 입력받고 숫자만큼 "나무를 찍으세요."
+	//다 찍으면 "나무를 캐었다" 출력
+
+
+//2. 1을 함수로 만들고 함수에 숫자를 전달하면
+//"나무를 찍는다"를 반복하세요
+//다 찍으면 "나무를 캐었다" 출력
+//
+
+
+
+void chopTree() {
+	int cnt;
+	int x = 0;
+
+	scanf("%d", &cnt);
+
+	while (x < cnt) {
+
+		printf("나무를 찍으세요.\n");
+		x++;
+	}
+	//return 0;
+}
+
+
+
+
+//3. 함수를 만들어서 1번째 인자는 반복회수, 2번째 인자는
+//해당번째 마다 "쿵"을 출력
+//chopTree(10, 3);
+//"나무를 찍었다"
+//"나무를 찍었다"
+//"나무를 찍었다"
+//"쿵"
+//  
+
+void fellTree(int cnt, int boom) {
+	
+	int x = 0;
+	
+
+	scanf("%d", &cnt);
+
+	while (x < cnt) {
+
+		printf("나무를 찍으세요.\n");
+		x++;
+	}
+
+	  if (x == cnt) {
+		printf("쿵\n");
+	  }
+	
+
+}
+
+
+
+
+
+void main() {
+
+	int cnt=0;
+	int boom=0;
+
+	
+	//chopTree();
+
+	fellTree(cnt,boom);
+
+	printf("나무를 캐었다.\n");
+
+	
+
+
+
+
+//4. chopTree(10,3,2)
+//	3번에 한번은 "쿵" 두번에 한번은 "쩍"
+
+}
