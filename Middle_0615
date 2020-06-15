@@ -1,3 +1,6 @@
+#include <stdio.h>
+
+
 1. 양의 정수 입력받고 그 수만큼 3의 배수 출력하세요
    예를 들어 5를 입력받으면 3 6 9 12 15를 출력하면 됩니다
 
@@ -15,6 +18,29 @@
 *****
 이렇게 출력하세요.
 
+int main(void){
+	
+	int num;
+	int r;
+	int c;
+	
+	scanf("%d",&num);
+	
+	for(r=5;r>0;r--){
+		for(c=r;c>num;c--){
+			printf("* ");
+		}
+		printf("\n");
+	}
+	
+	return 0;
+}
+	
+
+
+
+
+
 
 4. 5를 입력하면
 *****
@@ -23,6 +49,29 @@
 **
 *
 이렇게 역순으로 출력하세요.
+
+
+int main44(void){
+	
+	int num;
+	int r;
+	int c;
+	
+	scanf("%d",&num);
+	
+	for(r=0;r<5;r++){
+		for(c=r;c<num;c++){
+			printf("* ");
+		}
+		printf("\n");
+	}
+	
+	return 0;
+}
+
+
+
+
 
 5. 3명의 국어성적을 입력받고 총합과 평균을 출력하세요
   함수를 만들어서 사용하세요
