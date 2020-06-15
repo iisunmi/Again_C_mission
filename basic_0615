@@ -1,48 +1,108 @@
 #include <stdio.h>
 
-int main(void) {
-	//1. while문을 이용해서 1부터 100까지 출력하세요
+//1. while문을 이용해서 1부터 100까지 출력하세요
 	
-	/*int x=0;
+	int main11(void){
+	
+	int x=1;
+	while(x<=100){
+		printf("%d\n",x);
+		x++;
+	     }
+	
+        }
 
-	while (x<100) {
-		printf("%d\n", ++x);
+
+
+//2. while문을 이용해서 10부터 20까지 출력하세요
+
+	int main22(void){
+	
+	int x=10;
+	while(x<=20){
+		printf("%d\n",x);
+		x++;
 	}
-
-	return 0;*/
-
-
-	//2. while문을 이용해서 10부터 20까지 출력하세요
 	
-	//int y = 10;
+       }
 
-	//while (y <= 20) {
-	//	printf("%d\n", y++);
-	//}
-
-	//return 0;
 
 	//3. while문을 이용해서 1부터 10까지 합을 출력하세요
 	
-	int x = 0;
-	int sum = 0;
+		int x=0;
+	int sum=0;
 	
-	while (x < 10) {
-		
-		printf("%d\n", ++x);
-		
+	while(1){
+	 x++;
+	 sum=sum+x;
+	 if(x==10) break;
 	}
-
-	return 0;
+	
+	printf("%d\n",sum);
+}
 
 	//4. while문을 이용해서 1부터 10까지 중에 짝수만 출력하세요
 	//while문내에 조건문을 넣어주면 됨
 	//짝수 조건 if (num % 2 == 0)
-	//
-	//
-	//5. 양의 정수를 입력받고 그 수만큼 "감사합니다"를 출력하세요
-	//
-	//6. 세개의 숫자를 입력받아서 가장 큰 수를 출력하는 프로그램을 구현하라
-
-
+	
+	int main44(void){
+	
+	int num;
+	int i=1;
+	scanf("%d",&num);
+	
+	while(i<=10){
+	 
+	 if(i%2==0)	 
+	 printf("%d\n",i);
+	 i++;
+	}	
 }
+
+	
+	
+	
+	
+	
+	
+//5. 양의 정수를 입력받고 그 수만큼 "감사합니다"를 출력하세요
+	
+	int main55(void){
+	
+	int cnt;
+	int i=0;
+	scanf("%d",&cnt);
+	
+	for(i=0;i<cnt;++i){
+	printf("감사합니다.\n",cnt);
+		
+	}		
+}
+	
+//6. 세개의 숫자를 입력받아서 가장 큰 수를 출력하는 프로그램을 구현하라
+        int main66(void){
+	
+	int a;
+	int b;
+	int c;
+	int max;
+	
+	scanf("%d %d %d",&a,&b,&c);
+	
+	if(a<b) max=b;
+	else max=a;
+	
+	if(b<c) max=c;
+	else max=b;
+	
+	if(c<a) max=a;
+	else max=c;
+	
+	printf("%d\n",max);			
+}
+
+
+
+   
+
+
