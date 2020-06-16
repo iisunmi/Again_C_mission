@@ -1,0 +1,104 @@
+#include <stdio.h>
+#include <string.h>
+#include "turboc.h"
+
+
+
+
+/*<3명의 학생이름과 국어점수를 입력받고 
+   총점과 평균 각학생 이름과 점수를 출력 
+ 이름과 국어점수 모두 배열을 이용해서 입력하세요>*/
+
+
+#define ST_NUM 3
+
+ //배열이 탄생한 이후의 코드
+int SumNAvg() {
+
+		int kor[ST_NUM] = { 0 }; //모두 0으로 초기화한다
+		double avg = 0.0;
+		int sum = 0;
+
+		for (int i = 0; i < ST_NUM; i++) {
+			printf("%d번째 학생 국어 점수 입력 : ", i + 1);
+			scanf_s("%d", &kor[i]);
+			sum += kor[i];
+		}
+
+		avg = (double)sum / ST_NUM;
+
+
+
+		printf("총합은 %d입니다\n", sum);
+		printf("평균은 %.2lf입니다\n", avg);
+
+		return 0;
+	}
+
+
+
+
+
+
+
+
+
+
+#define ST_NUM 3
+
+
+void main() {
+
+	char name0[10] = { 0 };
+	char name1[10] = { 0 };
+	char name2[10] = { 0 };
+	int kor0 = 0, kor1 = 0, kor2 = 0;
+	double avg = 0.0;
+	int sum = 0;
+
+
+	/*scanf_s는 "홍길동"  o
+	 1. fgets는 "홍 길동"  => 홍 만 받아
+	 2. fgets는 enter를 기준으로 읽어들임
+	 여기서 쓰는 이유: 성과 이름 사이에 띄어쓰기를 해서 모두 입력받고 싶어서!
+	 */
+
+	printf("1번째 학생 이름 입력 : ");
+	fgets(name0, sizeof(name0) - 1, stdin);  //????
+	name0[strlen(name0) - 1] = 0;  //  '\n'(엔터값) 을 '\0' 으로 바꿔준다
+	printf("1번째 학생 국어 점수 입력 : ");
+	scanf_s("%d", &kor0);
+	getchar();
+
+	printf("2번째 학생 이름 입력 : ");
+	fgets(name1, sizeof(name1) - 1, stdin);  //????
+	name1[strlen(name1) - 1] = 0;
+	printf("2번째 학생 국어 점수 입력 : ");
+	scanf_s("%d", &kor1);
+	getchar();
+
+	printf("3번째 학생 이름 입력 : ");
+	fgets(name2, sizeof(name2) - 1, stdin);  //????
+	name2[strlen(name2) - 1] = 0;
+	printf("3번째 학생 국어 점수 입력 : ");
+	scanf_s("%d", &kor2);
+	getchar();
+
+	printf("%s학생의 국어점수는 %d입니다.\n", name0, kor0);
+	printf("%s학생의 국어점수는 %d입니다.\n", name1, kor1);
+	printf("%s학생의 국어점수는 %d입니다.\n", name2, kor2);
+
+
+	avg = (double)sum / ST_NUM;
+
+
+
+	printf("총합은 %d입니다\n", sum);
+	printf("평균은 %.2lf입니다\n", avg);
+
+
+
+	SumNAvg();
+
+}
+
