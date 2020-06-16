@@ -51,24 +51,22 @@ int main(void){
 이렇게 역순으로 출력하세요.
 
 
-int main44(void){
-	
 	int num;
-	int r;
-	int c;
+	int i, j;
+	printf("숫자를 입력해보려요 >>>");
+	scanf_s("%d", &num, sizeof(num));
+	printf("\n");
+	for (j = num; 0 <= j; j--)
+	{
+		for (i = 0; i <= num; i++)
+		{
+			if (j > i)
 	
-	scanf("%d",&num);
-	
-	for(r=0;r<5;r++){
-		for(c=r;c<num;c++){
-			printf("* ");
+				printf("*");
+
 		}
 		printf("\n");
 	}
-	
-	return 0;
-}
-
 
 
 
