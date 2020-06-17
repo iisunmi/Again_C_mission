@@ -1,0 +1,101 @@
+#include <stdio.h>
+
+#define _CRT_SECURE_NO_WARNINGS
+#pragma warning(disable: 4996)
+
+
+void main11(){
+//1. 10개 정수 입력 후 최대 최소 총합 평균을 구하세요.
+	
+	double num=0;
+	double min=1;
+	double max=0;
+	double sum=0;
+	double avg;
+	
+
+	
+	for (int i = 1; i <= 10; ++i) {
+		
+		printf("숫자를 입력하세요 >> ");
+		scanf("%lf", &num);
+		if (min > num){
+			min = num;
+		}
+
+		if (max < num){
+			max = num;
+		}
+		
+			sum += num;
+			avg = sum / 10;
+	}
+	printf("총합 : %lf\n", sum);
+	printf("평균 : %.2lf\n", avg);
+	printf("최대 : %lf\n", max);
+	printf("최소 : %lf\n", min);
+
+	
+}
+
+
+void main() {
+//2.소문자를 대문자로, 대문자를 소문자로,
+//그외 문자는 그대로 출력하세요.(변환하는 함수를 만들것)
+	int ch;
+
+	printf();
+	scanf();
+
+	if (ch > 'A' && ch < 'Z') {
+		printf("")
+	}
+
+	else if (ch>'a' && ch<'z') {
+
+	}
+	else if(ch>'0'&&ch<'9') {
+
+	}
+	else if () {
+		printf(기타문자임)
+	}
+
+
+
+
+}
+
+void problem3() {
+//3. 사용자로부터 초를 입력받은 후 이를[시, 분, 초]의
+//형태로 출력하는 프로그램을 작성하세요.
+//1) 입력 함수
+//2) 시간 계산 / 출력 함수
+}
+
+void problem4() {
+//4. 사용자로부터 시, 분, 초를 입력받은 후 초로 변환하는 함수와
+//이 계산된 초를 출력하는 함수를 만들고 사용하세요
+//1) 시, 분, 초 입력 / 계산 함수
+//2) 초 출력 함수
+}
+
+void problem5() {
+		//5. 키와 몸무게를 입력하는 함수를 만들고 사용해보세요
+		//
+}
+
+void problem6() {
+//6. 반드시 A를 이용해서 B의 값을 채우도록 하세요
+//// 배열 A, B를 선언
+//int A[2][4] = { 1,2,3,4,5,6,7,8 };
+//int B[4][2] = { 0 };
+//
+//A                B
+//1 2 3 4          1 5
+//5 6 7 8          2 6
+//3 7
+//4 8
+}
+
+
