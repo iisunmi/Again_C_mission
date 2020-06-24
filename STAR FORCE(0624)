@@ -1,0 +1,475 @@
+#include <stdio.h>
+#include <windows.h>
+#include <conio.h>
+#include <time.h>
+#include <stdlib.h>
+
+
+// 정의 부분
+
+#define BOSS 2
+#define SPACE 0
+#define WALL 1
+#define B_X 42 //보스 시작위치
+#define B_Y 5
+#define E_X 42 //쫄병 시작위치
+#define E_Y 5
+#define U_X 44 //사용자 시작위치
+#define U_Y 40
+#define I_X 52
+#define I_Y 24
+
+
+void gotoxy(int a, int b);
+void Menu();
+void DrawBoss(int x, int y);
+void DrawUser(int x, int y);
+void DrawUser2(int x, int y);
+void DrawUser3(int x, int y);
+void DrawEnemy1(int x, int y);
+void DrawEnemy2(int x, int y);
+void DrawEnemy3(int x, int y);
+void DrawEnemy4(int x, int y);
+void DrawEnemy5(int x, int y);
+void DrawitemEnemy6(int x, int y);
+void DrawItem(int x, int y);
+void cursor(int n);
+void bulletmove();
+void DrawBullet(int i);
+void EraseBullet(int i);
+
+//구조체 부분
+
+typedef struct bullet {//총알의 위치를 알려줄 구조체
+    int x, y;
+} bullet;
+
+struct {
+    BOOL exist;
+    int x, y;
+}Bullet[3];
+
+typedef struct user_stat
+{
+    int x, y;//위치
+    int life;// 목숨
+    int chk; //총알의 발사 여부
+    bullet bullet; // 각각의 총알
+    int selUser;
+}user_stat;
+
+struct user_stat User;
+
+typedef struct boss_stat
+{
+    int x, y; //위치
+    int life; //목숨
+    int chk;
+    bullet bullet;
+
+}boss_stat;
+
+struct boss_stat Boss;
+
+typedef struct enemy_stat
+{
+    int x, y;
+    int life;
+    int chk;
+    bullet bullet;
+
+}enemy_stat;
+
+struct enemy_stat Enemy;
+
+typedef struct item_stat
+{
+    int x, y;
+    int life;
+    int chk;
+    bullet bullet;
+
+}item_stat;
+
+struct item_stat Item;
+
+// 기본함수부분
+void gotoxy(int x, int y) // 커서의 위치를 x , y로 이동하는 함수
+{
+    COORD Pos = { x, y };
+    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), Pos);
+}
+
+void cursor(int n) // 커서 보이기 & 숨기기
+{
+    HANDLE hConsole;
+    CONSOLE_CURSOR_INFO ConsoleCursor;
+
+    hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+
+    ConsoleCursor.bVisible = n;
+    ConsoleCursor.dwSize = 1;
+    SetConsoleCursorInfo(hConsole, &ConsoleCursor);
+}
+
+
+void EraseUser(int x, int y)
+{
+    gotoxy(x, y - 2); printf("                                                ");
+    gotoxy(x, y - 1); printf("                                                ");
+    gotoxy(x - 1, y); printf("                                                ");
+    gotoxy(x, y); printf("                                                ");
+    gotoxy(x + 1, y); printf("                                                ");
+    gotoxy(x, y + 1); printf("                                                ");
+    gotoxy(x, y + 2); printf("                                                ");
+}
+
+
+// 아군출력함수 부분
+void DrawUser(int x, int y) // 일반상태 아군비행선 모습
+{
+    gotoxy(x, y); printf("  ☆  ");
+}
+
+void DrawUser2(int x, int y) // 방어막 아아템 먹었을때 아군비행선 모습
+{
+    gotoxy(x - 2, y - 1); printf("  ★★★  ");
+    gotoxy(x, y); printf("  ☆  ");
+}
+
+void DrawUser3(int x, int y) // 따발총 아이템을 먹었을때 아군비행선 모습
+{
+    gotoxy(x + 2, y - 1); printf("▲");
+    gotoxy(x, y); printf("▲☆▲");
+}
+
+// 적군 출력 부분
+void DrawBoss(int x, int y)  // 보스 출력
+{
+    gotoxy(x + 2, y - 1);  printf("■■■■■");
+    gotoxy(x + 1, y);         printf("■■■■■■");
+    gotoxy(x, y + 1);   printf("■  ■■■  ■");
+    gotoxy(x - 1, y + 2);      printf("■    ■■    ■");
+    gotoxy(x - 2, y + 3);   printf("■■■■■■■■■");
+    gotoxy(x - 1, y + 4);   printf("■  ■    ■  ■");
+    gotoxy(x, y + 5);   printf("■          ■");
+    gotoxy(x + 1, y + 6);   printf("■■■■■■");
+    gotoxy(x + 2, y + 7); printf("■■■■■");
+}
+void DrawEnemy1(int x, int y)
+{
+    gotoxy(x - 75, y + 11); printf("■■■■■■■");
+    gotoxy(x - 75, y + 12); printf("■■■■■■■");
+    gotoxy(x - 75, y + 13); printf("    ■■■    ");
+    gotoxy(x - 75, y + 14); printf("    ■■■    ");
+    gotoxy(x - 75, y + 15); printf("    ■■■    ");
+    gotoxy(x - 75, y + 16); printf("■■■■■■■");
+    gotoxy(x - 75, y + 17); printf("■■■■■■■");
+}
+
+void DrawEnemy2(int x, int y)
+{
+    gotoxy(x - 45, y + 11); printf("■■      ■■");
+    gotoxy(x - 45, y + 12); printf("■■      ■■");
+    gotoxy(x - 45, y + 13); printf("■■■  ■■■");
+    gotoxy(x - 45, y + 14); printf("■■■■■■■");
+    gotoxy(x - 45, y + 15); printf("■■■■■■■");
+    gotoxy(x - 45, y + 16); printf("  ■■■■■  ");
+    gotoxy(x - 45, y + 17); printf("    ■■■    ");
+}
+
+void DrawEnemy3(int x, int y)
+{
+    gotoxy(x - 15, y + 11); printf("■■      ■■");
+    gotoxy(x - 15, y + 12); printf("■■      ■■");
+    gotoxy(x - 15, y + 13); printf("■■■■■■■");
+    gotoxy(x - 15, y + 14); printf("■■■■■■■");
+    gotoxy(x - 15, y + 15); printf("    ■■■  ");
+    gotoxy(x - 15, y + 16); printf("    ■■■  ");
+    gotoxy(x - 15, y + 17); printf("    ■■■  ");
+}
+
+void DrawEnemy4(int x, int y)
+{
+    gotoxy(x + 45, y + 12); printf("■■      ■■");
+    gotoxy(x + 45, y + 11); printf("■■      ■■");
+    gotoxy(x + 45, y + 13); printf("■■      ■■");
+    gotoxy(x + 45, y + 14); printf("■■      ■■");
+    gotoxy(x + 45, y + 15); printf("■■      ■■");
+    gotoxy(x + 45, y + 16); printf("■■■■■■■");
+    gotoxy(x + 45, y + 17); printf("■■■■■■■");
+}
+
+void DrawEnemy5(int x, int y)
+{
+    gotoxy(x + 75, y + 10); printf("        ■        ");
+    gotoxy(x + 75, y + 11); printf("      ■■■      ");
+    gotoxy(x + 75, y + 12); printf("      ■■■      ");
+    gotoxy(x + 75, y + 13); printf("■■■■■■■■■");
+    gotoxy(x + 75, y + 14); printf("  ■■■■■■■  ");
+    gotoxy(x + 75, y + 15); printf("    ■■■■■    ");
+    gotoxy(x + 75, y + 16); printf("  ■■■■■■■  ");
+    gotoxy(x + 75, y + 17); printf("■■■      ■■■  ");
+    gotoxy(x + 75, y + 18); printf("■■          ■■");
+}
+
+void DrawitemEnemy6(int x, int y)
+{
+    gotoxy(x + 15, y + 11); printf("■■■■■■■");
+    gotoxy(x + 15, y + 12); printf("■■■■■■■");
+    gotoxy(x + 15, y + 13); printf("■■      ■■");
+    gotoxy(x + 15, y + 14); printf("■■      ■■");
+    gotoxy(x + 15, y + 15); printf("■■      ■■");
+    gotoxy(x + 15, y + 16); printf("■■■■■■■");
+    gotoxy(x + 15, y + 17); printf("■■■■■■■");
+}
+
+void ChangeDrawUser(int x, int y)
+{
+    switch (User.selUser)
+    {
+    case 0:
+        EraseUser(x, y);
+        DrawUser(x, y);
+        break;
+    case 1:
+        EraseUser(x, y);
+        DrawUser2(x, y);
+        break;
+    case 2:
+        EraseUser(x, y);
+        DrawUser3(x, y);
+        break;
+    }
+}
+
+void DrawItem(int x, int y)
+{
+    gotoxy(x, y); printf("★");
+}
+
+// 게임 실행 함수 부분
+void game()//게임 실행
+{
+    system("cls");
+    int i = 1, k = 1, b_move;
+    unsigned int prev_time = 0;
+    User.x = U_X, User.y = U_Y, User.life = 1, User.chk = 0, User.selUser = 0;
+    Boss.x = B_X, Boss.y = B_Y, Boss.life = 20, Boss.chk = 0;
+    Enemy.x = E_X, Enemy.y = E_Y, Enemy.life = 3, Enemy.chk = 0;
+    Item.x = I_X, Item.y = I_Y;
+    Boss.bullet.y = 0;
+    Enemy.bullet.y = 0;
+
+    while (1)
+    {
+        Boss.life = 20;
+        User.life = 1;
+        Enemy.life = 3;
+        DrawBoss(Boss.x * 2, Boss.y);
+        ChangeDrawUser(User.x * 2, User.y);
+        //DrawUser(User.x * 2, User.y);
+        DrawEnemy1(Enemy.x * 2, Enemy.y);
+        DrawEnemy2(Enemy.x * 2, Enemy.y);
+        DrawEnemy3(Enemy.x * 2, Enemy.y);
+        DrawEnemy4(Enemy.x * 2, Enemy.y);
+        DrawEnemy5(Enemy.x * 2, Enemy.y);
+        DrawitemEnemy6(Enemy.x * 2, Enemy.y);
+        DrawItem(Item.x * 2, Item.y);
+        bulletmove();
+
+        if ((GetAsyncKeyState(VK_UP) & 0x0001) && (20 < User.y)) {//방향키로 위 아래 양옆 이동
+            gotoxy((User.x - 2) * 2, User.y); printf("        ");
+            User.y--;
+        }
+        if ((GetAsyncKeyState(VK_DOWN) & 0x0001) && (48 > User.y)) {
+            gotoxy((User.x - 2) * 2, User.y); printf("        ");
+            User.y++;
+        }
+        if ((GetAsyncKeyState(VK_RIGHT) & 0x0001) && (85 > User.x)) {
+            gotoxy((User.x - 2) * 2, User.y); printf("        ");
+            User.x++;
+        }
+        if ((GetAsyncKeyState(VK_LEFT) & 0x0001) && (2 < User.x)) {
+            gotoxy((User.x - 2) * 2, User.y); printf("        ");
+            User.x--;
+        }
+        if (GetAsyncKeyState(0x41) & 0x0001) {
+            User.selUser++;
+            if (User.selUser > 2)
+                User.selUser = 0;
+        }
+        if (GetAsyncKeyState(VK_SPACE) & 0x0001) {//총 쏘는 부분
+            for (i = 0; i < 3 && Bullet[i].exist == TRUE; i++) { ; }
+            if (i != 3) {
+                Bullet[i].x = User.x * 2;
+                Bullet[i].y = User.y;
+                Bullet[i].exist = TRUE;
+            }
+        }
+        if (time(NULL) - prev_time >= 1) {
+            prev_time = time(NULL);
+            b_move = rand() % 2;
+            if (b_move && Boss.x > 2) {
+                gotoxy(Boss.x * 2 + 2, Boss.y - 1);         printf("                    ");
+                gotoxy(Boss.x * 2 + 1, Boss.y);   printf("                ");
+                gotoxy(Boss.x * 2, Boss.y + 1);      printf("                    ");
+                gotoxy(Boss.x * 2 - 1, Boss.y + 2);   printf("                        ");
+                gotoxy(Boss.x * 2 - 2, Boss.y + 3);   printf("                          ");
+                gotoxy(Boss.x * 2 - 1, Boss.y + 4);   printf("                     ");
+                gotoxy(Boss.x * 2, Boss.y + 5);   printf("                 ");
+                gotoxy(Boss.x * 2 + 1, Boss.y + 6);   printf("                 ");
+                gotoxy(Boss.x * 2 + 2, Boss.y + 7);   printf("                 ");
+                Boss.x -= 2;
+            }
+            else if (!b_move && Boss.x < 22) {
+                gotoxy(Boss.x * 2 + 2, Boss.y - 1);         printf("                    ");
+                gotoxy(Boss.x * 2 + 1, Boss.y);   printf("                ");
+                gotoxy(Boss.x * 2, Boss.y + 1);      printf("                    ");
+                gotoxy(Boss.x * 2 - 1, Boss.y + 2);   printf("                        ");
+                gotoxy(Boss.x * 2 - 2, Boss.y + 3);   printf("                          ");
+                gotoxy(Boss.x * 2 - 1, Boss.y + 4);   printf("                     ");
+                gotoxy(Boss.x * 2, Boss.y + 5);   printf("                 ");
+                gotoxy(Boss.x * 2 + 1, Boss.y + 6);   printf("                 ");
+                gotoxy(Boss.x * 2 + 2, Boss.y + 7);   printf("                 ");
+                Boss.x += 2;
+            }
+            if (!Boss.chk) {//보스의 총알이 발사되지 않은 경우
+                Boss.bullet.x = Boss.x * 2 + 6, Boss.bullet.y = 7; // 총알의 첫 위치 
+                gotoxy(Boss.bullet.x, Boss.bullet.y); printf("▽");// 총알의 모습
+                Boss.chk = 1;// 총알이 발사 됐다고 명시해줌
+            }
+            if (Boss.chk) {//보스의 총알이 발사됐을 경우
+                if (Boss.bullet.y > 48) {//보스의 총알이 일정 위치 아래로 내려간 경우
+                    gotoxy(Boss.bullet.x, Boss.bullet.y); printf("  ");//총알 초기화
+                    Boss.chk = 0;
+                }
+                else {//그렇지 않은 경우 총알 계속 전진
+                    gotoxy(Boss.bullet.x, Boss.bullet.y); printf("  ");
+                    Boss.bullet.y += 6;
+                    gotoxy(Boss.bullet.x, Boss.bullet.y); printf("▽");
+                }
+            }
+
+        }
+        if (time(NULL) - prev_time >= 1) {//1초마다 총알, 보스 위치 이동 총알 없을 시 총알 생성
+            prev_time = time(NULL);
+            b_move = rand() % 2;
+            if (b_move && Enemy.x > 0) {//보스 이동할 때마다 잔상 지우기
+                gotoxy(Enemy.x * 2 + 1, Enemy.y + 1);         printf("                    ");
+                gotoxy(Enemy.x * 2 + 1, Enemy.y - 1);   printf("                ");
+                gotoxy(Enemy.x * 2 - 1, Enemy.y + 1);      printf("                    ");
+                gotoxy(Enemy.x * 2 - 1, Enemy.y - 1);   printf("                        ");
+
+                Enemy.x -= 2;
+            }
+            else if (!b_move && Enemy.x < 80) {// 위와 같음
+                gotoxy(Enemy.x * 2 + 1, Enemy.y + 1);         printf("                    ");
+                gotoxy(Enemy.x * 2 + 1, Enemy.y - 1);   printf("                ");
+                gotoxy(Enemy.x * 2 - 1, Enemy.y + 1);      printf("                    ");
+                gotoxy(Enemy.x * 2 - 1, Enemy.y - 1);   printf("                        ");
+
+                Enemy.x += 2;
+            }
+            if (!Enemy.chk) {//보스의 총알이 발사되지 않은 경우
+                Enemy.bullet.x = Enemy.x * 2, Enemy.bullet.y = 16; // 총알의 첫 위치 
+                gotoxy(Enemy.bullet.x, Enemy.bullet.y); printf("▽");// 총알의 모습
+                Enemy.chk = 1;// 총알이 발사 됐다고 명시해줌
+            }
+            if (Enemy.chk) {//보스의 총알이 발사됐을 경우
+                if (Enemy.bullet.y > 48) {//보스의 총알이 일정 위치 아래로 내려간 경우
+                    gotoxy(Enemy.bullet.x, Enemy.bullet.y); printf("  ");//총알 초기화
+                    Enemy.chk = 0;
+                }
+                else {//그렇지 않은 경우 총알 계속 전진
+                    gotoxy(Enemy.bullet.x, Enemy.bullet.y); printf("  ");
+                    Enemy.bullet.y += 7;
+                    gotoxy(Enemy.bullet.x, Enemy.bullet.y); printf("▽");
+                }
+            }
+
+        }
+        Sleep(10);
+    }
+}
+
+
+void help()
+{
+    system("cls");
+    DrawBoss(B_X * 2, B_Y);
+    DrawUser(U_X * 2, U_Y);
+    gotoxy(70, 17); printf("위와같은 보스가 나타나면");
+    gotoxy(70, 19); printf("방향키를 이용하여 적의 공격을 피하고");
+    gotoxy(70, 21); printf("스페이스바를 이용하여 적을 공격하십시오");
+    gotoxy(70, 23); system("pause");
+}
+
+void Menu()//메뉴고르기
+{
+    int a;
+    system("mode CON COLS=190 LINES=50");
+
+    while (1)
+    {
+        system("cls");
+        gotoxy(60, 15); printf("┌──────────────────────────────────────────────────┐");
+        gotoxy(60, 16); printf("│                                                  │");
+        gotoxy(60, 17); printf("│                   1. 게임 시작                   │");
+        gotoxy(60, 18); printf("│                                                  │");
+        gotoxy(60, 19); printf("│                                                  │");
+        gotoxy(60, 20); printf("│                   2. 게임 방법                   │");
+        gotoxy(60, 21); printf("│                                                  │");
+        gotoxy(60, 22); printf("│                                                  │");
+        gotoxy(60, 23); printf("│                   3. 게임 종료                   │");
+        gotoxy(60, 24); printf("│                                                  │");
+        gotoxy(60, 25); printf("└──────────────────────────────────────────────────┘");
+        gotoxy(75, 35); printf("번호를 입력하시오 : ");
+        scanf_s("%d", &a);
+        if (a == 1)
+        {
+            printf("게임을 시작합니다.");
+            game();
+        }
+        else if (a == 2)
+            help();
+        else
+        {
+            printf("-끝-");
+            break;
+        }
+    }
+}
+
+void bulletmove() {
+    int i;
+    for (i = 0; i < 3; i++) {
+        if (Bullet[i].exist == TRUE) {
+            EraseBullet(i);
+            if (Bullet[i].y == 0) {
+                Bullet[i].exist = FALSE;
+            }
+            else {
+                Bullet[i].y--;
+                DrawBullet(i);
+            }
+        }
+    }
+}
+
+void DrawBullet(int i) {
+    gotoxy(Bullet[i].x, Bullet[i].y); printf("●");
+}
+
+void EraseBullet(int i) {
+    gotoxy(Bullet[i].x, Bullet[i].y); printf("  ");
+}
+
+
+void main()
+{
+    cursor(0);
+    srand((unsigned)time(0));
+    Menu();
+    return 0;
+}
